@@ -26,5 +26,11 @@ MANDATORY: After completing each task, update this repo’s AGENTS.md Task Log (
 
 ## Task Log (Recent)
 - Keep newest first; include date and short summary.
+- 2026-03-24 Validation results: `npm install` ✅, `npm run typecheck` ⚠️ blocked (cannot install `@astrojs/check` due registry policy), `npm run build` ✅.
+- 2026-03-24 Action items workflow implemented (add/remove/edit task, owner, due date) with copy-actions output.
+- 2026-03-24 Live structured preview implemented with executive-ready minutes formatting.
+- 2026-03-24 Local draft persistence added via localStorage (`meeting-minutes-ai:v1:draft`).
+- 2026-03-24 V1 scope implemented for Meeting Minutes AI (/app public workspace, section toggles, reset confirmation, copy actions).
+- 2026-03-24 Meeting Minutes AI V1 implementation started.
 - 2026-02-09 Added repo-level AGENTS.md enforcement contract (workspace reference + mandatory task-log update rule).
 - 2026-02-09 Initialized repo AGENTS baseline for single-repo Codex/AI safety.

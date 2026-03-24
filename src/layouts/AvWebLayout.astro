@@ -1,0 +1,14 @@
+---
+import { WebLayout } from "@ansiversa/components";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const props = Astro.props as Props;
+---
+
+<WebLayout {...props}>
+  <slot />
+</WebLayout>

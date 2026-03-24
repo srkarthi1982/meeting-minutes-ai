@@ -1,0 +1,194 @@
+---
+import AppShell from "../layouts/AppShell.astro";
+import AppMiniAppBar from "../components/AppMiniAppBar.astro";
+import { AvButton, AvCard, AvInput, AvTextarea } from "@ansiversa/components";
+
+const title = "Meeting Minutes AI Workspace";
+const description = "Structured meeting documentation workspace for executive-ready minutes.";
+---
+
+<AppShell title={title} description={description}>
+  <div class="meeting-app" x-data x-init="$store.meetingApp.init()">
+    <AppMiniAppBar
+      title="Meeting Minutes AI"
+      subtitle="Capture and structure meeting notes in a clear, executive-ready format."
+    />
+
+    <section class="meeting-grid">
+      <div class="meeting-left">
+        <AvCard>
+          <h2>Meeting Basics</h2>
+          <div class="meeting-fields">
+            <AvInput label="Meeting title" placeholder="Q2 Product Review" x-model="$store.meetingApp.basics.title" @input="$store.meetingApp.persist()" />
+            <AvInput label="Date" type="date" x-model="$store.meetingApp.basics.date" @input="$store.meetingApp.persist()" />
+            <AvInput label="Participants" placeholder="Alex, Priya, Sam" x-model="$store.meetingApp.basics.participants" @input="$store.meetingApp.persist()" />
+            <AvInput label="Organizer" placeholder="Your name" x-model="$store.meetingApp.basics.organizer" @input="$store.meetingApp.persist()" />
+            <AvTextarea label="Meeting purpose" rows={3} placeholder="Briefly state the purpose of this meeting." x-model="$store.meetingApp.basics.purpose" @input="$store.meetingApp.persist()" />
+          </div>
+        </AvCard>
+
+        <AvCard>
+          <h2>Section Editors</h2>
+          <div class="toggle-row">
+            <label><input type="checkbox" x-model="$store.meetingApp.toggles.agenda" @change="$store.meetingApp.persist()" /> Agenda</label>
+            <label><input type="checkbox" x-model="$store.meetingApp.toggles.decisions" @change="$store.meetingApp.persist()" /> Decisions</label>
+            <label><input type="checkbox" x-model="$store.meetingApp.toggles.actionItems" @change="$store.meetingApp.persist()" /> Action items</label>
+            <label><input type="checkbox" x-model="$store.meetingApp.toggles.notes" @change="$store.meetingApp.persist()" /> Notes</label>
+          </div>
+
+          <div class="meeting-fields">
+            <div x-show="$store.meetingApp.toggles.agenda">
+              <AvTextarea label="Agenda" rows={4} placeholder="One agenda point per line" x-model="$store.meetingApp.sections.agenda" @input="$store.meetingApp.persist()" />
+            </div>
+            <AvTextarea label="Discussion points" rows={5} placeholder="Capture key discussion points clearly" x-model="$store.meetingApp.sections.discussion" @input="$store.meetingApp.persist()" />
+            <div x-show="$store.meetingApp.toggles.decisions">
+              <AvTextarea label="Decisions made" rows={4} placeholder="Document decisions and rationale" x-model="$store.meetingApp.sections.decisions" @input="$store.meetingApp.persist()" />
+            </div>
+            <div x-show="$store.meetingApp.toggles.notes">
+              <AvTextarea label="Additional notes" rows={4} placeholder="Add extra context or blockers" x-model="$store.meetingApp.sections.notes" @input="$store.meetingApp.persist()" />
+            </div>
+          </div>
+        </AvCard>
+
+        <AvCard x-show="$store.meetingApp.toggles.actionItems">
+          <div class="action-header">
+            <h2>Action Items</h2>
+            <AvButton size="sm" variant="outline" @click="$store.meetingApp.addActionItem()">Add item</AvButton>
+          </div>
+
+          <template x-for="(item, index) in $store.meetingApp.actionItems" :key="item.id">
+            <div class="action-item">
+              <p class="action-item__label" x-text="`Item ${index + 1}`"></p>
+              <AvInput placeholder="Task" x-model="item.task" @input="$store.meetingApp.persist()" />
+              <AvInput placeholder="Owner" x-model="item.owner" @input="$store.meetingApp.persist()" />
+              <AvInput type="date" x-model="item.dueDate" @input="$store.meetingApp.persist()" />
+              <AvButton size="sm" variant="ghost" @click="$store.meetingApp.removeActionItem(item.id)">Remove</AvButton>
+            </div>
+          </template>
+        </AvCard>
+
+        <AvCard>
+          <div class="action-row">
+            <AvButton @click="$store.meetingApp.copySummary()">Copy meeting summary</AvButton>
+            <AvButton variant="outline" @click="$store.meetingApp.copyActionItems()">Copy action items only</AvButton>
+            <AvButton variant="ghost" @click="$store.meetingApp.resetDraft()">Reset / new meeting</AvButton>
+          </div>
+          <p class="copy-status" x-text="$store.meetingApp.copyStatus"></p>
+        </AvCard>
+      </div>
+
+      <div class="meeting-right">
+        <AvCard className="preview-card">
+          <h2>Live Meeting Preview</h2>
+          <pre x-text="$store.meetingApp.getSummaryText()"></pre>
+        </AvCard>
+      </div>
+    </section>
+  </div>
+</AppShell>
+
+<style>
+  .meeting-app {
+    padding: 1.25rem;
+    max-width: 1360px;
+    margin: 0 auto;
+  }
+
+  .meeting-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .meeting-left,
+  .meeting-right {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .meeting-fields {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 0.8rem;
+  }
+
+  .toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 0.8rem;
+    color: var(--av-text-muted);
+    font-size: 0.92rem;
+  }
+
+  .toggle-row label {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .action-header,
+  .action-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .action-item {
+    border: 1px solid var(--av-border-subtle);
+    border-radius: var(--av-radius-sm);
+    padding: 0.8rem;
+    margin-top: 0.9rem;
+    display: grid;
+    gap: 0.7rem;
+    background: rgba(15, 23, 42, 0.5);
+  }
+
+  .action-item__label {
+    color: var(--av-text-soft);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .preview-card pre {
+    margin-top: 0.75rem;
+    white-space: pre-wrap;
+    line-height: 1.55;
+    color: #e2e8f0;
+    font-size: 0.9rem;
+  }
+
+  .copy-status {
+    margin-top: 0.65rem;
+    font-size: 0.86rem;
+    color: var(--av-text-muted);
+  }
+
+  .mini-app-bar {
+    margin-bottom: 1rem;
+    padding: 0.9rem 0.25rem;
+  }
+
+  .mini-app-bar__label {
+    color: var(--av-text-soft);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.45rem;
+  }
+
+  .mini-app-bar__subtitle {
+    margin-top: 0.4rem;
+    max-width: 72ch;
+  }
+
+  @media (max-width: 1024px) {
+    .meeting-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
