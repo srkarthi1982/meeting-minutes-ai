@@ -23,11 +23,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
-  // Public V1 routes for this mini-app
-  if (pathname === "/" || pathname === "/app" || pathname === "/app/") {
-    return next();
-  }
-
   // Ensure predictable shape
   locals.user = locals.user ?? undefined;
   locals.sessionToken = null;
@@ -56,13 +51,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
       locals.sessionToken = null;
       locals.isAuthenticated = false;
     }
-  }
-
-  // ✅ ENFORCE AUTH (protect everything in mini-app)
-  if (!locals.isAuthenticated) {
-    const loginUrl = new URL("/login", ROOT_APP_URL);
-    loginUrl.searchParams.set("returnTo", url.toString()); // ✅ full URL back to quiz
-    return context.redirect(loginUrl.toString());
   }
 
   return next();
