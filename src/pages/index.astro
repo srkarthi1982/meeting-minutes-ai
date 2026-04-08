@@ -1,33 +1,152 @@
 ---
 import AppShell from "../layouts/AppShell.astro";
-import { AvButton, AvCard, AvContainer } from "@ansiversa/components";
+import LandingPageStandard from "../components/landing/LandingPageStandard.astro";
+import type { LandingPageContent } from "../lib/landing";
 
 const title = "Meeting Minutes AI – Ansiversa";
 const description = "Capture and structure meeting notes with a premium executive-ready workspace.";
+
+const landingContent: LandingPageContent = {
+  categoryLabel: "Work Documentation",
+  appLabel: "Public local-only workspace",
+  title: "Keep meeting notes structured instead of piecing minutes together after the call.",
+  subtitle:
+    "Capture meeting basics, organize the discussion, manage action items, and keep a live structured summary ready to copy when the meeting is done.",
+  heroBullets: [
+    "Fill meeting basics, agenda, discussion notes, decisions, and action items in one browser-local draft",
+    "Use section toggles to control what appears in the formatted output without rebuilding the notes manually",
+    "Copy the full summary or action-items-only output and keep the draft in local storage until you reset it",
+  ],
+  primaryCta: {
+    label: "Open Workspace",
+    href: "/app",
+  },
+  secondaryCta: {
+    label: "See Workflow",
+    href: "#workflow",
+    variant: "ghost",
+  },
+  heroNote:
+    "Current V1 is a public local structuring tool. It does not provide server-backed AI transcription, real-time collaboration, or automatic summarization.",
+  heroPanel: {
+    eyebrow: "Minutes flow",
+    title: "Capture → Organize → Copy",
+    steps: [
+      "1. Enter meeting details and discussion points",
+      "2. Manage action items and visible sections",
+      "3. Copy the structured summary or action list when ready",
+    ],
+    meta: [
+      { value: "Local", label: "Storage model" },
+      { value: "Public", label: "Workspace access" },
+    ],
+  },
+  features: {
+    title: "What Meeting Minutes AI actually does in V1",
+    lead:
+      "The product helps you format and organize meeting notes in the browser. The value is in structured capture and clean output, not AI generation.",
+    items: [
+      {
+        title: "Structured meeting draft",
+        description:
+          "Keep meeting purpose, participants, discussion, decisions, notes, and action items inside one live workspace.",
+      },
+      {
+        title: "Section toggle control",
+        description:
+          "Turn agenda, decisions, notes, and action items on or off so the output matches the meeting format you need.",
+      },
+      {
+        title: "Action-item specific output",
+        description:
+          "Copy the action list separately when you only need follow-through items instead of the full minutes summary.",
+      },
+      {
+        title: "Reset-safe local persistence",
+        description:
+          "The draft stays in local storage across refresh until you intentionally reset and start a new meeting.",
+      },
+    ],
+  },
+  pillars: {
+    title: "Why this works better than raw notes in a blank document",
+    lead:
+      "The product stays deliberately narrow: one local workspace that helps you keep meeting details readable, structured, and ready to reuse outside the browser.",
+    items: [
+      {
+        title: "Truthful product boundary",
+        description:
+          "This is a manual meeting-minutes structuring tool, not an AI transcription engine or automatic summary generator.",
+      },
+      {
+        title: "Format-aware capture",
+        description:
+          "The workspace gives separate places for meeting basics, discussion, decisions, and action items so the notes hold shape as you write.",
+      },
+      {
+        title: "Copy-ready output",
+        description:
+          "The full summary and action-items-only output make it easier to move the notes into email, docs, or follow-up systems after the meeting.",
+      },
+      {
+        title: "Friction-light access",
+        description:
+          "The app is public and local in V1, so you can open it quickly without account or server setup when a meeting starts.",
+      },
+    ],
+  },
+  workflow: {
+    eyebrow: "How it works",
+    title: "Move from rough discussion notes to structured minutes",
+    lead:
+      "The workflow is designed around live editing and copyable output, with the browser holding the draft until you decide to reset it.",
+    steps: [
+      {
+        title: "Open the local workspace",
+        description:
+          "Start in `/app`, enter the meeting basics, and begin filling the discussion and follow-up sections as the meeting unfolds.",
+      },
+      {
+        title: "Shape the output",
+        description:
+          "Toggle sections, add action items, and refine the notes while the live preview keeps the structured summary visible.",
+      },
+      {
+        title: "Copy and reset when ready",
+        description:
+          "Copy the full summary or the action-only list for external use, then reset the draft when the next meeting begins.",
+      },
+    ],
+  },
+  showcase: {
+    eyebrow: "Current product shape",
+    title: "Built for structured meeting notes, not AI meeting automation",
+    description:
+      "The landing copy stays aligned to the verified implementation: Meeting Minutes AI is a public browser-local workspace with live formatting, section toggles, action-item management, copy actions, reset behavior, and local persistence.",
+    bullets: [
+      "Good fit for turning raw notes into a cleaner post-meeting summary without opening multiple tools",
+      "Centered on manual capture, structured formatting, action-item review, and copy-ready output",
+    ],
+    calloutLabel: "Freeze truth",
+    calloutValue: "Manual minutes workspace only",
+  },
+  finalCta: {
+    title: "Start capturing the next meeting with more structure",
+    description:
+      "Open the workspace, shape the minutes as the discussion happens, and leave with output you can copy straight into the next step.",
+    primaryCta: {
+      label: "Open Workspace",
+      href: "/app",
+    },
+    secondaryCta: {
+      label: "Review Features",
+      href: "#features",
+      variant: "ghost",
+    },
+  },
+};
 ---
 
 <AppShell title={title} description={description}>
-  <section class="av-hero">
-    <AvContainer size="narrow" className="av-hero__content--narrow">
-      <div class="av-hero__content">
-        <div class="av-kicker"><span>Career & Work · Ansiversa Mini App</span></div>
-        <h1 class="av-gradient-text">Meeting Minutes AI</h1>
-        <p>A structured workspace for professional meeting minutes and follow-through.</p>
-      </div>
-      <div class="av-cta-row">
-        <AvButton href="/app">Open Workspace</AvButton>
-      </div>
-    </AvContainer>
-  </section>
-
-  <section class="av-section">
-    <AvContainer size="narrow">
-      <AvCard>
-        <h2>Built for clear, executive-ready documentation.</h2>
-        <p>
-          Capture meeting purpose, discussion, decisions, and action items in one calm workspace with a live structured preview.
-        </p>
-      </AvCard>
-    </AvContainer>
-  </section>
+  <LandingPageStandard content={landingContent} />
 </AppShell>
